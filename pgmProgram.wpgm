@@ -1,5 +1,5 @@
 import wollok.game.*
-import example.*
+import pacman.*
 
 program pacmanGame {
 	
@@ -9,9 +9,18 @@ program pacmanGame {
 	
 	// fondo
 	game.boardGround("pacmanBackground.jpg")
-	
 	// personaje principal
-	game.addVisualCharacter(pacman)
+	game.addVisual(pacman)
+	
+	// movimietnos
+	keyboard.w().onPressDo({pacman.moverseHaciaArriba()})
+	keyboard.s().onPressDo({pacman.moverseHaciaAbajo()})
+	keyboard.a().onPressDo({pacman.moverseHaciaIzquierda()})
+	keyboard.d().onPressDo({pacman.moverseHaciaDerecha()})
+	
+	
+	
+
 	
 	// que arranque el juego!
 	game.start()
