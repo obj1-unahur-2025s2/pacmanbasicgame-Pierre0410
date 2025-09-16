@@ -1,7 +1,12 @@
 import wollok.game.*
 import pacman.*
+import fantasmas.*
 
 program pacmanGame {
+	const fantasmas = [ fantasmaAzul, fantasmaRojo, fantasmaAmarillo, fantasmaRosa ]
+
+	
+	game.title("Pacman!")
 	
 	// límites del juego
 	game.width(14)
@@ -9,20 +14,52 @@ program pacmanGame {
 	
 	// fondo
 	game.boardGround("pacmanBackground.jpg")
-	// personaje principal
-	game.addVisual(pacman)
 	
-	// movimietnos
+	//rivales 
+	game.addVisual(fantasmaAzul)
+	game.addVisual(fantasmaRojo)
+	// personaje principal
+	
+	game.addVisual(pacman)
 	keyboard.w().onPressDo({pacman.moverseHaciaArriba()})
 	keyboard.s().onPressDo({pacman.moverseHaciaAbajo()})
 	keyboard.a().onPressDo({pacman.moverseHaciaIzquierda()})
 	keyboard.d().onPressDo({pacman.moverseHaciaDerecha()})
 	
 	
+	fantasmas.forEach { 
+		fantasma => 
+		game.whenCollideDo(fantasma, { personaje =>
+		personaje.perderVida()
+		game.say(pacman, "me quedan " + personaje.vidas() + " vidas")
+		if (personaje.juegoTerminado()) {
+			game.say(pacman, "Se me terminaron las vidas!!!")
+			game.say(pacman, "gameEnd")
+			game.stop() 
+			//game.onTick(5000, "gameEnd", { game.stop() })
+		}
+		})
+	}
+
+	game.start()
 	
 
+	/*
+	const rivales = [new Rival(numero = 1), new Rival(numero = 2)]
+	
+	rivales.forEach { rival => 
+		game.addVisual(rival)
+		game.whenCollideDo(rival, { personaje =>
+			personaje.perderVida()
+			game.say(pacman, "Ups! Perdí una vida")
+			if (personaje.juegoTerminado()) {
+				game.say(pacman, "Se me terminaron las vidas!!!")
+				game.onTick(5000, "gameEnd", { game.stop() })
+			}
+		})
+	}
 	
 	// que arranque el juego!
 	game.start()
-	
+	*/
 }

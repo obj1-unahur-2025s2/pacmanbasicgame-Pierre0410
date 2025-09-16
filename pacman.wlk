@@ -1,9 +1,20 @@
+
 import wollok.game.*
-
 object pacman {
-	const property image = "pacman.png"
+	
+	var property image = "pacman.png"
 	var property position = game.origin()
+	var vidas = 3
 
+	
+
+	method vidas() = vidas
+	method perderVida() {
+		vidas = vidas - 1
+		position = game.origin()	
+	}
+	
+	method juegoTerminado() = vidas == 0
 	method moverseHaciaArriba(){
 		if(self.position().y() == game.height() - 1){
 			self.position(game.at(self.position().x(),0))
@@ -38,5 +49,19 @@ object pacman {
 			self.position(self.position().right(1))
 		}
 	}
-
 }
+
+/*
+object cherry {
+	var property image = "cherry.png"
+	var property position = game.center()
+}
+
+class Rival {
+	const numero
+	
+	method image() = "rival" + numero.toString() + ".png"
+
+	method position() = game.at(numero + 1, numero + 1)
+}
+*/
