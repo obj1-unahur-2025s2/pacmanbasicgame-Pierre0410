@@ -1,7 +1,10 @@
 import wollok.game.*
-import example.*
+import pacman.*
+import fantasmas.*
 
 program pacmanGame {
+	const fantasmas = [ fantasmaAzul, fantasmaRojo ]
+
 	
 	game.title("Pacman!")
 	
@@ -12,11 +15,36 @@ program pacmanGame {
 	// fondo
 	game.boardGround("pacmanBackground.jpg")
 	
+	//rivales 
+	game.addVisual(fantasmaAzul)
+	game.addVisual(fantasmaRojo)
 	// personaje principal
-	game.addVisualCharacter(pacman)
+	
+	game.addVisual(pacman)
+	keyboard.w().onPressDo({pacman.moverseHaciaArriba()})
+	keyboard.s().onPressDo({pacman.moverseHaciaAbajo()})
+	keyboard.a().onPressDo({pacman.moverseHaciaIzquierda()})
+	keyboard.d().onPressDo({pacman.moverseHaciaDerecha()})
+	
+	
+	fantasmas.forEach { 
+		fantasma => 
+		game.whenCollideDo(fantasma, { personaje =>
+		personaje.perderVida()
+		game.say(pacman, "me quedan " + personaje.vidas() + " vidas")
+		if (personaje.juegoTerminado()) {
+			game.say(pacman, "Se me terminaron las vidas!!!")
+			game.say(pacman, "gameEnd")
+			game.stop() 
+			//game.onTick(5000, "gameEnd", { game.stop() })
+		}
+		})
+	}
+
+	game.start()
 	
 
-	// rivales
+	/*
 	const rivales = [new Rival(numero = 1), new Rival(numero = 2)]
 	
 	rivales.forEach { rival => 
@@ -33,5 +61,5 @@ program pacmanGame {
 	
 	// que arranque el juego!
 	game.start()
-	
+	*/
 }
